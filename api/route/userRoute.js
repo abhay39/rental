@@ -1,5 +1,5 @@
 import express from 'express';
-import { createNewUser } from '../controllers/userControllers.js';
+import { createNewUser, updateContactNumber } from '../controllers/userControllers.js';
 
 const router=express.Router();
 
@@ -10,5 +10,6 @@ router.get('/',async(req,res)=>{
 })
 
 router.post("/createAccount",createNewUser)
+router.post("/updateContact/:id",updateContactNumber)
 
 export default router;

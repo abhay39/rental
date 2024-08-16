@@ -25,48 +25,7 @@ export default function Home() {
     imageUrl: "",
   });
 
-  const dispatch=useDispatch();
-
-  const signUp = async (userData: Info) => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/user/createAccount`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      });
-      
-      const status = res.status;
-      const result = await res.json();
-      
-      if (status === 201) {
-        dispatch(setUserInfo(result.data))
-      }
-      else if (status === 202) {
-        dispatch(setUserInfo(result.data))
-      } else {
-        // toast.error(result.message);
-      }
-      
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => {
-    if (user && isSignedIn) {
-      const newUserdata: Info = {
-        fullName: user.fullName || "",
-        email: user.primaryEmailAddress?.emailAddress || "",
-        password: "",  // Assuming you handle password separately
-        imageUrl: user.imageUrl || "",
-      };
-      setUserData(newUserdata);
-      signUp(newUserdata);
-    }
-  }, [user, isSignedIn]); // Added dependencies
-
+  
   if (!isLoaded) {
     return <h1>Loading...</h1>;
   }
