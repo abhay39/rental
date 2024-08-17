@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./component/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
+import MainPage from "@/utils/MainPage";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,17 +19,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-        />
-          <Navbar />
-          {children}
-          </body>
-      </html>
-    </ClerkProvider>
+    <MainPage>
+        <ClerkProvider>
+          <html lang="en">
+            <body className={inter.className}>
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+            />
+              <Navbar />
+              {children}
+              </body>
+          </html>
+        </ClerkProvider>
+    </MainPage>
   );
 }

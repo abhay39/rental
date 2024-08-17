@@ -1,7 +1,9 @@
 "use client";
+import { setUserInfo } from "@/store/userStore";
 import { useUser } from "@clerk/nextjs";
 import { lazy, Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 const HeroSection = lazy(() => import('./component/HeroSection'));
 const Latest = lazy(() => import('./component/Latest'));
@@ -23,6 +25,8 @@ export default function Home() {
     imageUrl: "",
   });
 
+  const dispatch=useDispatch();
+
   const signUp = async (userData: Info) => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/user/createAccount`, {
@@ -37,7 +41,10 @@ export default function Home() {
       const result = await res.json();
       
       if (status === 201) {
-        // toast.success(result.message);
+        dispatch(setUserInfo(result.data))
+      }
+      else if (status === 202) {
+        dispatch(setUserInfo(result.data))
       } else {
         // toast.error(result.message);
       }
