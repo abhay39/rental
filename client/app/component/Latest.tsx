@@ -25,8 +25,7 @@ const Latest = () => {
     const [allRooms,setAllRooms]=useState<Listing[]>([]);
 
     const getRooms=async()=>{
-        console.log(process.env.NEXT_PUBLIC_API_KEY)
-        const response=await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/latest`);
+        const response=await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListing`);
         const data=await response.json();
         // console.log(data)
         setAllRooms(data);
@@ -34,7 +33,7 @@ const Latest = () => {
 
     useEffect(()=>{
         getRooms();
-    },[]);
+    },[allRooms]);
 
   return (
     <section className=" min-h-screen lg:px-32 md:px-16 px-4 py-6">

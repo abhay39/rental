@@ -18,12 +18,6 @@ type Info = {
 export default function Home() {
   const { isSignedIn, isLoaded, user } = useUser();
 
-  const [userData, setUserData] = useState<Info>({
-    fullName: "",
-    email: "",
-    password: "",
-    imageUrl: "",
-  });
 
   
   if (!isLoaded) {

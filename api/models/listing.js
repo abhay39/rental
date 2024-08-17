@@ -14,19 +14,23 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    listingType:{
+      type:String,
+      required: true,
+    },
     regularPrice: {
       type: Number,
       required: true,
     },
-    discountPrice: {
+    bathroom: {
       type: Number,
       required: true,
     },
-    bathrooms: {
+    bedroom: {
       type: Number,
       required: true,
     },
-    bedrooms: {
+    kitchen: {
       type: Number,
       required: true,
     },
@@ -38,11 +42,11 @@ const listingSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    type: {
-      type: String,
+    electricity: {
+      type: Boolean,
       required: true,
     },
-    offer: {
+    water: {
       type: Boolean,
       required: true,
     },

@@ -2,6 +2,7 @@ import express from 'express';
 import fetch from 'node-fetch';
 import cors from 'cors';
 import userRoutes from './route/userRoute.js';
+import listingRoutes from './route/listingRoutes.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -37,6 +38,9 @@ app.get("/api/latest",async(req,res)=>{
 
 // user routes
 app.use("/api/user",userRoutes)
+
+// listing routes
+app.use("/api/listing",listingRoutes)
 
 app.listen(5000,()=>{
     console.log("Server is running on port 5000");
