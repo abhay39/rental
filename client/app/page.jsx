@@ -4,16 +4,11 @@ import { useUser } from "@clerk/nextjs";
 import { lazy, Suspense, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import HeroSection from "./component/HeroSection";
+import Latest from "./component/Latest";
+import ContactSection from "./component/ContactSection";
 
-const HeroSection = lazy(() => import('./component/HeroSection'));
-const Latest = lazy(() => import('./component/Latest'));
 
-type Info = {
-  fullName: string;
-  email: string;
-  password: string;
-  imageUrl: string;
-}
 
 export default function Home() {
   const { isSignedIn, isLoaded, user } = useUser();
@@ -29,6 +24,7 @@ export default function Home() {
       <main className="bg-[#F1F5F1] min-h-screen">
         <HeroSection />
         <Latest />
+        <ContactSection />
       </main>
     </Suspense>
   );

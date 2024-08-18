@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 import { Armchair, Bath, BedDouble, ChevronLeft, ChevronRight, CookingPot, Forward, GlassWater, MapPin, ParkingCircle, Plug } from "lucide-react";
@@ -22,21 +22,21 @@ const images = [
 const ListingSingle = ({ params }) => {
 
   // State to keep track of the current image index
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [listing, setListing] = useState();
 
   // State to determine if the image is being hovered over
-  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Function to show the previous slide
-  const prevSlide = (): void => {
+  const prevSlide = () => {
     setCurrentIndex(
       (prevIndex) => (prevIndex - 1 + images.length) % images.length
     );
   };
 
   // Function to show the next slide
-  const nextSlide = (): void => {
+  const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
@@ -56,31 +56,33 @@ const ListingSingle = ({ params }) => {
   }, [isHovered]);
 
   // Handle mouse over event
-  const handleMouseOver = (): void => {
+  const handleMouseOver = ()=> {
     setIsHovered(true);
   };
 
   // Handle mouse leave event
-  const handleMouseLeave = (): void => {
+  const handleMouseLeave = ()=> {
     setIsHovered(false);
   };
 
   const [copied, setCopied] = useState(false);
 
-
-  const getListingDetails = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListing/${params.id}`);
-    const data = await response.json();
-    // console.log(data)
-    setListing(data);
-  }
-
+  const getListingDetails = useCallback(async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListing/${params.id}`);
+      const data = await response.json();
+      setListing(data);
+    } catch (error) {
+      console.error('Error fetching listing details:', error);
+    }
+  }, [params.id]); // Memoize based on params.id
+  
   useEffect(() => {
     getListingDetails();
-  }, []);
+  }, [getListingDetails]);
 
 
-  const [showDetails,setShowDetails]=useState<boolean>(false)
+  const [showDetails,setShowDetails]=useState(false)
 
   return (
     <section key={listing?._id} className=" min-h-screen lg:px-32 md:px-16 px-4 py-6">

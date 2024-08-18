@@ -4,10 +4,7 @@ import Image from "next/image";
 import { StaticImageData } from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Interface for image data
-interface ImageData {
-  src: StaticImageData;
-}
+
 
 // Image data array
 const images = [
@@ -27,20 +24,20 @@ const images = [
 
 export default function ImageSlider() {
   // State to keep track of the current image index
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // State to determine if the image is being hovered over
-  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Function to show the previous slide
-  const prevSlide = (): void => {
+  const prevSlide = () => {
     setCurrentIndex(
       (prevIndex) => (prevIndex - 1 + images.length) % images.length
     );
   };
 
   // Function to show the next slide
-  const nextSlide = (): void => {
+  const nextSlide = ()=> {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
@@ -60,12 +57,12 @@ export default function ImageSlider() {
   }, [isHovered]);
 
   // Handle mouse over event
-  const handleMouseOver = (): void => {
+  const handleMouseOver = ()=> {
     setIsHovered(true);
   };
 
   // Handle mouse leave event
-  const handleMouseLeave = (): void => {
+  const handleMouseLeave = ()=> {
     setIsHovered(false);
   };
 

@@ -6,31 +6,25 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 
-type info = {
-  fullName: string;
-  email: string;
-  password: string;
-  imageUrl: string;
-}
 
 
 const SignUp = () => {
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [userData, setUserData] = useState<info>({
+  const [isLoading, setIsLoading] = useState(false)
+  const [userData, setUserData] = useState({
     fullName: "",
     email: "",
     password: "",
     imageUrl: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value })
    
   }
 
 
-  const uploadPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadPhoto = async (e) => {
     const file = e.target.files[0];
     setIsLoading(true);
     const data = new FormData()

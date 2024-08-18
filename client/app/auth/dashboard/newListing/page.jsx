@@ -7,9 +7,9 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 const NewListing = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [adding, setAdding] = useState<boolean>(false)
-  const [urls, setUrls] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [adding, setAdding] = useState(false)
+  const [urls, setUrls] = useState([]);
   const userInfo=useSelector(item=>item.userDetails);
 
 
@@ -30,9 +30,7 @@ const NewListing = () => {
 
   const router=useRouter();
 
-  const addUrl = (newUrl:string) => {
-    setUrls((prevUrls) => [...prevUrls, newUrl]);
-  };
+  
 
   const addListing=async()=>{
     setAdding(true)
@@ -70,7 +68,7 @@ const NewListing = () => {
     setAdding(false)
   }
 
-  const uploadPhotos = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadPhotos = async (e) => {
     const files = e.target.files;
     // console.log(files)
 
@@ -99,7 +97,7 @@ const NewListing = () => {
   };
 
 
-  const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
+  const handleChange=(e)=>{
     setListingInfo({...listingInfo,[e.target.name]: e.target.value})
   }
   

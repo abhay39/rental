@@ -1,28 +1,40 @@
 "use client"
-import LisitingComponent from "@/app/component/LisitingComponent";
 import { setUserInfo } from "@/store/userStore";
 import { useUser } from "@clerk/nextjs"
+import { RootState } from "../../../store/index";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
 
-const page = () => {
+
+
+const Dashboard = () => {
     const {user}=useUser();
     const router=useRouter();
     const dispatch=useDispatch();
-    const userDetails=useSelector(item=>item.userDetails);
-    const [openModel,setOpenModel] = useState<boolean>(false)
-    const [contactNumber,setContactNumber] = useState<number>()
+    const userDetails = useSelector(state => state.userDetails);
+
+    const [openModel,setOpenModel] = useState(false)
+    const [contactNumber,setContactNumber] = useState()
     const [userListing,setUserListing] = useState([]);
     const [showListing,setShowListing] = useState(false);
 
-    const getUserDetails=async()=>{
-      let res= await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListingOfCurrentUser/${userDetails?._id}`);
-      const data=await res.json();
-      // console.log(data)
-      setUserListing(data)
-    }
+    useEffect(() => {
+      const getUserDetails = async () => {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListingOfCurrentUser/${userDetails?._id}`);
+          const data = await res.json();
+          setUserListing(data);
+        } catch (err) {
+          console.error('Error fetching user details:', err);
+        }
+      };
+    
+      getUserDetails();
+    }, [userDetails?._id]); // No need to include getUserDetails as a dependency
+    
 
     const updateMobileNumber=async()=>{
       console.log("text")
@@ -54,11 +66,7 @@ const page = () => {
       }
     },[userDetails])
 
-    useEffect(()=>{
-      if(userDetails){
-        getUserDetails()
-      }
-    },[userDetails])
+
 
 
     const toogleListing=()=>{
@@ -71,7 +79,7 @@ const page = () => {
       <div className=" bg-slate-100 shadow-md p-4 w-full md:w-2/3 lg:w-1/2">
         <h1 className=" text-xl font-bold text-center">Profile</h1>
         <div className="flex items-center justify-center flex-col w-full">
-          <img src={user?.imageUrl} alt="user" height={60} width={60} className=" rounded-full"/>
+          <Image src={user?.imageUrl} alt="user" height={60} width={60} className=" rounded-full"/>
           <div className=" mt-3 w-full">
             <input readOnly value={userDetails?.fullName} type="text" name="fullName" className=" p-2 rounded-md text-sm outline-none border-none w-full" id="" />
             <br />
@@ -127,7 +135,7 @@ const page = () => {
               {
                userListing?.map((item,index)=>(
                     <tr key={index}>
-                      <td><img src={item?.imageUrls[0]} height={50} width={50}/></td>
+                      <td><Image src={item?.imageUrls[0]} height={50} width={50} alt={item.name}/></td>
                       <td className=" font-bold">{item?.name}</td>
                       <td className=" uppercase">{item?.listingType}</td>
                       <td>&#8377;.{item?.regularPrice}/-</td>
@@ -146,4 +154,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Dashboard

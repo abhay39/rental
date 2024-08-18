@@ -3,29 +3,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-// Define the Listing type
-type Listing = {
-  _id: string;
-  name: string;
-  description: string;
-  address: string;
-  regularPrice: number;
-  discountPrice: number;
-  bathroom: number;
-  bedroom: number;
-  furnished: boolean;
-  parking: boolean;
-  type: string;
-  userRef: string;
-  offer: boolean;
-  imageUrls: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-};
 
 // Define the Card component
-const Card: React.FC<{ item: Listing }> = ({ item }) => {
+const Card= ({ item }) => {
    const router=useRouter();
   return (
     <div onClick={()=>{

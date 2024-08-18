@@ -2,27 +2,8 @@
 import { useEffect, useState } from "react"
 import Card from "./Card";
 
-type Listing={
-    _id: string;
-    name: string;
-    description: string;
-    address: string;
-    regularPrice: number;
-    discountPrice: number;
-    bathrooms: number;
-    bedrooms: number;
-    furnished: boolean;
-    parking: boolean;
-    type: string;
-    userRef: string;
-    offer: boolean;
-    imageUrls: string[];
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-}
 const Latest = () => {
-    const [allRooms,setAllRooms]=useState<Listing[]>([]);
+    const [allRooms,setAllRooms]=useState([]);
 
     const getRooms=async()=>{
         const response=await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListing`);
