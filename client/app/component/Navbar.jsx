@@ -1,7 +1,7 @@
 "use client"
 import { setUserInfo } from "@/store/userStore";
 import { useUser, SignOutButton } from "@clerk/nextjs";
-import { SearchIcon } from "lucide-react"
+import { CircleX, Cross, Loader, SearchIcon } from "lucide-react"
 import Image from "next/image";
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
@@ -91,12 +91,27 @@ useEffect(() => {
         <Link href={"/"} className=" text-2xl font-bold cursor-pointer duration-500 transition-all hover:opacity-55 text-black">Khoojo Room</Link>
         <div className=" border-black w-[30%] hidden rounded-xl md:flex gap-2 p-2 items-center bg-slate-200">
         <input
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search here..."
-            type="text"
-            className="bg-slate-200 w-full border-none outline-none"
-        />
-            <SearchIcon size={18} />
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search here..."
+                type="text"
+                className="bg-slate-200 w-full border-none outline-none"
+            />
+            {search?.length > 0 ? (
+                <div className="flex gap-2 items-center">
+                    <div className="animate-spin">
+                        <Loader size={18} />
+                    </div>
+                    <div
+                        className="hover:bg-slate-400 rounded-full p-1"
+                        onClick={() => setSearch('')} // Set search to an empty string to clear it
+                    >
+                        <CircleX size={18} />
+                    </div>
+                </div>
+            ) : (
+                <SearchIcon size={18} />
+            )}
         </div>
         <ul className=" flex gap-4 font-medium items-center">
             <li><Link href="/" className={`${pathname==="/"?"font-bold text-green-700":"font-medium"} duration-500 transition-all hover:opacity-55`}>Home</Link></li>

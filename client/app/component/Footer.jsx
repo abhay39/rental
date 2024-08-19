@@ -25,10 +25,10 @@ export default function Footer() {
                 <Phone className="w-5 h-5 text-gray-400 mr-2" />
                 +977 9876543210
               </li>
-              <li className="flex items-center">
+              <a href="mailto:abhaytechhub@gmail.com" className="flex items-center">
                 <Mail className="w-5 h-5 text-gray-400 mr-2" />
                 abhaytechhub@gmail.com
-              </li>
+              </a>
             </ul>
           </div>
 

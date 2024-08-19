@@ -1,9 +1,6 @@
 "use client";
-import { setUserInfo } from "@/store/userStore";
 import { useUser } from "@clerk/nextjs";
-import { lazy, Suspense, useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import {useState } from "react";
 import HeroSection from "./component/HeroSection";
 import Latest from "./component/Latest";
 import ContactSection from "./component/ContactSection";
@@ -20,12 +17,12 @@ export default function Home() {
   }
 
   return (
-    <Suspense fallback={<h1>Loading....</h1>}>
+    
       <main className="bg-[#F1F5F1] min-h-screen">
         <HeroSection />
         <Latest />
         <ContactSection />
       </main>
-    </Suspense>
+
   );
 }

@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 
 import { Armchair, Bath, BedDouble, ChevronLeft, ChevronRight, CookingPot, Forward, GlassWater, MapPin, ParkingCircle, Plug } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const images = [
   {
@@ -25,6 +26,7 @@ const ListingSingle = ({ params }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [listing, setListing] = useState();
 
+  const router=useRouter();
   // State to determine if the image is being hovered over
   const [isHovered, setIsHovered] = useState(false);
 
@@ -69,7 +71,7 @@ const ListingSingle = ({ params }) => {
 
   const getListingDetails = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getListing/${params.id}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/getSingleListing/${params.id}`);
       const data = await response.json();
       setListing(data);
     } catch (error) {
@@ -173,7 +175,9 @@ const ListingSingle = ({ params }) => {
           </li>
         </div>
           <div >
-            <button className=" bg-green-400 font-bold p-2 text-white rounded-md">CONTACT SELLER</button>
+            <button onClick={()=>{
+              router.push(`/listing/${params.id}/message/${listing.addedBy._id}`)
+            }} className=" bg-green-400 font-bold p-2 text-white rounded-md">CONTACT SELLER</button>
           </div>
       </div>
     </section>

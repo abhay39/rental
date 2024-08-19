@@ -11,8 +11,8 @@ router.get('/',async(req,res)=>{
 
 router.post("/addListing",createListing)
 router.get("/getListing",getListing)
-router.get("/getListing/:id",getSingleListing)
-router.get("/getListing/search/:searchValue",getSingleListingBySearch)
+router.get("/getSingleListing/:id",getSingleListing)
+router.get('/getListing/search', getSingleListingBySearch);
 router.get("/getListingOfCurrentUser/:id",getListingOfCurrentUser)
 
 export default router;

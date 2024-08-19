@@ -59,10 +59,10 @@ export default function ContactSection() {
                 <Phone className="w-6 h-6 text-gray-700 mr-2" />
                 <span>Phone: +977 9876543210</span>
               </div>
-              <div className="flex items-center">
+              <a href="mailto:abhaytechhub@gmail.com" className="flex items-center">
                 <Mail className="w-6 h-6 text-gray-700 mr-2" />
                 <span>Support: abhaytechhub@gmail.com</span>
-              </div>
+              </a>
               <div className="flex items-center">
                 <Globe className="w-6 h-6 text-gray-700 mr-2" />
                 <span>Support: www.abhayguptaofficial.vercel.app</span>

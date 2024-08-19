@@ -17,7 +17,7 @@ const Latest = () => {
     },[allRooms]);
 
   return (
-    <section className=" min-h-screen lg:px-32 md:px-16 px-4 py-6">
+    <section className="  lg:px-32 md:px-16 px-4 py-6">
         <h1 className=" text-3xl font-bold text-gray-700">Recent offers</h1>
         <div className=" grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {
