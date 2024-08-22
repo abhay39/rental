@@ -15,7 +15,7 @@ const MessageModel=new mongoose.Schema({
     ref: 'User',
     required: true, 
   },
-  
+  read: { type: Boolean, default: false },
 },{timestamp:true})
 
 const Message = mongoose.model('Message', MessageModel);

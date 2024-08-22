@@ -1,6 +1,6 @@
 "use client"
 import { Send } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 
@@ -11,7 +11,11 @@ const SendingPersonalMessage = ({ params }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const messageEndRef = useRef(null);
 
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   useEffect(() => {
     const fetchPreviousMessages = async () => {
@@ -81,45 +85,87 @@ const SendingPersonalMessage = ({ params }) => {
     };
   }, []);
 
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/unread-message-count/${userDetails._id}`);
+      const data = await response.json();
+      setUnreadCount(data.totalUnread);
+    } catch (error) {
+      console.error('Error fetching unread message count:', error);
+    }
+  };
+  useEffect(() => {
+
+    if (userDetails?._id) {
+      fetchUnreadCount();
+    }
+  }, [userDetails]);
+
+  const [chatIsOpened,setIsChatOpened] = useState(false);
+  const markMessagesAsRead = async () => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/mark-as-read/${userDetails._id}/${params.sellerId}`, {
+        method: 'PUT'
+      });
+  
+      // Optionally, you can refetch the unread count
+      fetchUnreadCount();
+      // console.log("Done")
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+    }
+  };
+  
+  useEffect(() => {
+    if (params?.sellerId) {
+      setIsChatOpened(true)
+    }
+    markMessagesAsRead();
+  }, [chatIsOpened]);
+
+
   return (
-    <div className=' w-full'>
-      {/* <h1>{unreadCount}</h1> */}
-      <ul className="space-y-2 h-[640px] p-4 overflow-auto scroll-smooth">
-        {messages.map((msg, index) => (
-          <li
-            key={index}
-            className={`flex ${msg.sender === userDetails._id ? "justify-end" : "justify-start"
-              }`}
+    <div className="w-full h-full flex flex-col">
+  {/* Message List */}
+  <div className="h-[650px] p-4 overflow-y-auto mb-11">
+    <ul className="space-y-2">
+      {messages.map((msg, index) => (
+        <li
+          key={index}
+          className={`flex ${msg.sender === userDetails._id ? "justify-end" : "justify-start"
+            }`}
+        >
+          <span
+            className={`${msg.sender === userDetails._id
+                ? "bg-slate-600 text-right text-white"
+                : "bg-slate-600 text-left text-white"
+              } p-2 rounded-md max-w-xs`}
           >
-            <span
-              className={`${msg.sender === userDetails._id
-                  ? "bg-slate-600 text-right text-white"
-                  : "bg-slate-600 text-left text-white"
-                } p-2 rounded-md max-w-xs`}
-            >
-              {msg.content}
-            </span>
-          </li>
-        ))}
-      </ul>
+            {msg.content}
+          </span>
+        </li>
+      ))}
+       <div ref={messageEndRef} />
+    </ul>
+  </div>
 
-      <div className="relative z-50">
-        <div className="absolute inset-x-0 bottom-1 flex items-center p-2 bg-white">
-          <form className="flex w-full bottom-1  justify-between" onSubmit={sendMessage}>
-            <input
-              value={message}
-              className="w-full p-2 outline-none border-none"
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type a message..."
-            />
-            <button className="bg-slate-200 p-2 rounded-sm" type="submit">
-              <Send size={16} />
-            </button>
-          </form>
-        </div>
-      </div>
+  {/* Input Form */}
+  <div className="w-full p-2 mt-10 bg-white fixed bottom-0 left-0">
+    <form className="flex w-full justify-between" onSubmit={sendMessage}>
+      <input
+        value={message}
+        className="w-full p-2 outline-none border-none"
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type a message..."
+      />
+      <button className="bg-slate-600 p-2 h-8 text-white w-8 rounded-full flex items-center justify-center " type="submit">
+        <Send size={16} />
+      </button>
+    </form>
+  </div>
+</div>
 
-    </div>
+
   );
 };
 

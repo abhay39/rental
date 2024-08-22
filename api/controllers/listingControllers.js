@@ -2,7 +2,7 @@ import Listing from "../models/listing.js";
 
 export const createListing=async(req,res)=>{
     const data=req.body;
-    console.log(data)
+    // console.log(data)
     try{
         const addListing=new Listing(data);
         await addListing.save();
@@ -17,10 +17,16 @@ export const createListing=async(req,res)=>{
     }
 }
 
-export const getListing=async(req,res)=>{
-    const allListingss=await Listing.find({}).populate('addedBy');
-    res.json(allListingss)
-}
+export const getListing = async (req, res) => {
+    try {
+      const allListings = await Listing.find().populate('addedBy').select("-password");
+      res.json(allListings);
+    } catch (error) {
+    //   console.error("Error fetching listings:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+  
 
 export const getSingleListing=async(req,res)=>{
     const allListingss=await Listing.findById(req.params.id).populate('addedBy');
@@ -28,7 +34,7 @@ export const getSingleListing=async(req,res)=>{
 }
 
 export const getSingleListingBySearch = async (req, res) => {
-    console.log("from here",req.query);
+    // console.log("from here",req.query);
     
     const searchValue = req.query.search || '';
     const minPrice = parseFloat(req.query.minPrice) || 0;
@@ -36,10 +42,10 @@ export const getSingleListingBySearch = async (req, res) => {
     const bedrooms = parseInt(req.query.bedrooms) || null;
     const bathrooms = parseInt(req.query.bathrooms) || null;
     
-    console.log("Search:", searchValue);
-    console.log("Price Range:", minPrice, maxPrice);
-    console.log("Bedrooms:", bedrooms);
-    console.log("Bathrooms:", bathrooms);
+    // console.log("Search:", searchValue);
+    // console.log("Price Range:", minPrice, maxPrice);
+    // console.log("Bedrooms:", bedrooms);
+    // console.log("Bathrooms:", bathrooms);
   
     try {
       // Construct query object
@@ -57,7 +63,7 @@ export const getSingleListingBySearch = async (req, res) => {
       // Send the filtered results as the response
       res.status(200).json(allListings);
     } catch (error) {
-      console.error("Error fetching listings:", error);
+    //   console.error("Error fetching listings:", error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
@@ -65,7 +71,7 @@ export const getSingleListingBySearch = async (req, res) => {
   
 
 export const getListingOfCurrentUser=async(req,res)=>{
-    console.log(req.params.id)
+    // console.log(req.params.id)
     const allListingss=await Listing.find({
         addedBy:req.params.id
     })

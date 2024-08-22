@@ -63,7 +63,7 @@ const getUserChatList = async (userId) => {
 
     return users;
   } catch (error) {
-    console.error('Error retrieving user chat list:', error);
+    // console.error('Error retrieving user chat list:', error);
     return [];
   }
 };
@@ -123,6 +123,59 @@ const messageRoutes = (io) => {
       res.status(500).json({ message: 'Error retrieving chat list' });
     }
   });
+
+  router.get('/unread-message-count/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      // console.log(userId)
+  
+      // Aggregate unread messages count per sender
+      const unreadMessages = await Message.aggregate([
+        {
+          $match: {
+            recipient: new mongoose.Types.ObjectId(userId),
+            read: false
+          }
+        },
+        {
+          $group: {
+            _id: "$sender", // Group by sender
+            unreadCount: { $sum: 1 } // Count the number of unread messages
+          }
+        },
+        {
+          $count: "totalUnread" // Count the number of friends with unread messages
+        }
+      ]);
+  
+      const totalUnread = unreadMessages.length > 0 ? unreadMessages[0].totalUnread : 0;
+  
+      res.json({ totalUnread });
+    } catch (error) {
+      // console.error('Error fetching unread message count:', error);
+      res.status(500).json({ message: 'Error fetching unread message count' });
+    }
+  });
+
+  router.put('/mark-as-read/:userId/:senderId', async (req, res) => {
+    try {
+      const { userId, senderId } = req.params;
+      // console.log("Came")
+  
+      const isDone= await Message.updateMany(
+        { recipient: userId, sender: senderId, read: false },
+        { $set: { read: true } }
+      );
+      // console.log(isDone)
+  
+      res.json({ message: 'Messages marked as read' });
+    } catch (error) {
+      // console.error('Error marking messages as read:', error);
+      res.status(500).json({ message: 'Error marking messages as read' });
+    }
+  });
+  
+  
 
   return router;
 };
