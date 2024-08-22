@@ -22,7 +22,7 @@ const Sidebar = () => {
       if(user){
         getAllChats();
       }
-    },[user])
+    },[user,getAllChats])
 
     const handleTOogle=()=>{
       setShowUsers(!showUsers);

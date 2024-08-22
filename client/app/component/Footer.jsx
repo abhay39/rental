@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <h3 className="text-white text-lg font-semibold mb-4">About Us</h3>
             <p className="text-gray-400">
-            At Khoojo Rooms, we understand that finding the perfect space to call home can be both exciting and challenging. That's why we are dedicated to simplifying the process of booking rooms and flats, ensuring a seamless experience from start to finish.
+            At Khoojo Rooms, we understand that finding the perfect space to call home can be both exciting and challenging. That&apos;s why we are dedicated to simplifying the process of booking rooms and flats, ensuring a seamless experience from start to finish.
             </p>
           </div>
 

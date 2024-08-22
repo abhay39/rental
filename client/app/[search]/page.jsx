@@ -48,7 +48,7 @@ const Searching = ({ params }) => {
 
   useEffect(() => {
     getListings();
-  }, []);
+  }, [getListings]);
 
 
   const handleFilterChange = (e) => {
