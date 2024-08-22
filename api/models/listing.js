@@ -54,6 +54,10 @@ const listingSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    wifi:{
+      type: Boolean,
+      required: true,
+    },
     addedBy:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

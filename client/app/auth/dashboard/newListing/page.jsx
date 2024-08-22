@@ -2,9 +2,14 @@
 import { Loader } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import dynamic from 'next/dynamic'; // Import dynamic from 'next/dynamic'
+import 'react-quill/dist/quill.snow.css';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
 
 const NewListing = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -24,6 +29,7 @@ const NewListing = () => {
     listingType:"",
     furnished: false,
     parking: false,
+    wifi: false,
     electricity: false,
     water: false,
   })
@@ -34,6 +40,7 @@ const NewListing = () => {
 
   const addListing=async()=>{
     setAdding(true)
+    // console.log(desc)
     const response=await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/listing/addListing`, {
       method: "POST",
       headers: {
@@ -41,7 +48,7 @@ const NewListing = () => {
       },
       body: JSON.stringify({
         name: listingInfo.name,
-        description: listingInfo.description,
+        description: desc,
         address: listingInfo.address,
         regularPrice: listingInfo.regularPrice,
         bathroom: listingInfo.bathroom,
@@ -51,6 +58,7 @@ const NewListing = () => {
         furnished: listingInfo.furnished,
         parking: listingInfo.parking,
         electricity: listingInfo.electricity,
+        wifi:listingInfo.wifi,
         water: listingInfo.water,
         imageUrls: urls,
         addedBy:userInfo._id
@@ -100,6 +108,9 @@ const NewListing = () => {
   const handleChange=(e)=>{
     setListingInfo({...listingInfo,[e.target.name]: e.target.value})
   }
+
+  const text = useRef();
+  const [desc,setDesc]=useState('')
   
 
   return (
@@ -110,7 +121,8 @@ const NewListing = () => {
           <div className=" w-full">
             <input onChange={handleChange} name="name" placeholder="Name of Listing" type="text" className=" w-full p-3  border-gray-700 border rounded-md bg-white"  />
             <input onChange={handleChange} name="address" placeholder="Address" type="text" className=" w-full p-3 mt-3 border-gray-700 border rounded-md bg-white"  />
-            <textarea onChange={handleChange} name="description" rows={5} placeholder="Description"  className=" w-full p-3 mt-3 border-gray-700 border rounded-md bg-white"  />
+            {/* <textarea onChange={handleChange} name="description" rows={5} placeholder="Description"  className=" w-full p-3 mt-3 border-gray-700 border rounded-md bg-white"  /> */}
+            <ReactQuill name ref={text} className=' text-black rounded-md h-[300px] mb-12 mt-4 bg-white' theme="snow" value={desc} onChange={setDesc} />
           </div>
 
           <div className=" flex gap-5 flex-col">
@@ -126,7 +138,7 @@ const NewListing = () => {
             </div>
 
 
-            <div className=" grid grid-cols-2 lg:grid-cols-4">
+            <div className=" grid grid-cols-2 lg:grid-cols-3">
               <div className="flex text-xl items-center gap-2">
                 <input onChange={handleChange} type="radio" value={"true"} name="parking" id="parking" />
                 <label htmlFor="parking">Parking</label>
@@ -143,8 +155,12 @@ const NewListing = () => {
                 <input onChange={handleChange} type="radio" value={"true"} name="electricity" id="electricity" />
                 <label htmlFor="electricity">Electricity</label>
               </div>
+              <div className="flex text-xl items-center gap-2">
+                <input onChange={handleChange} type="radio" value={"true"} name="wifi" id="wifi" />
+                <label htmlFor="wifi">Wi-Fi</label>
+              </div>
             </div>
-            <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className=" grid grid-cols-2  lg:grid-cols-2 gap-3">
               <div className=" flex gap-3  items-center">
                 <input onChange={handleChange} type="number"  className=" p-3 rounded-md bg-slate-200 w-full" name="bedroom"/>
                 <label htmlFor="" className=" font-bold text-xl">Bedroom</label>

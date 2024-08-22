@@ -14,7 +14,7 @@ const Latest = () => {
 
     useEffect(()=>{
         getRooms();
-    },[allRooms]);
+    },[]);
 
   return (
     <section className="  lg:px-32 md:px-16 px-4 py-6">

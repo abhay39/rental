@@ -28,7 +28,7 @@ export const getSingleListing=async(req,res)=>{
 }
 
 export const getSingleListingBySearch = async (req, res) => {
-    console.log(req.query);
+    console.log("from here",req.query);
     
     const searchValue = req.query.search || '';
     const minPrice = parseFloat(req.query.minPrice) || 0;

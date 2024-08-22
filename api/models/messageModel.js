@@ -15,9 +15,7 @@ const MessageModel=new mongoose.Schema({
     ref: 'User',
     required: true, 
   },
-  chatRoom: {
-    type: String, 
-  },
+  
 },{timestamp:true})
 
 const Message = mongoose.model('Message', MessageModel);

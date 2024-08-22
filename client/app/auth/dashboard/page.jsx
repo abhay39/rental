@@ -79,7 +79,7 @@ const Dashboard = () => {
       <div className=" bg-slate-100 shadow-md p-4 w-full md:w-2/3 lg:w-1/2">
         <h1 className=" text-xl font-bold text-center">Profile</h1>
         <div className="flex items-center justify-center flex-col w-full">
-          <Image src={user?.imageUrl} alt="user" height={60} width={60} className=" rounded-full"/>
+          <Image src={userDetails?.imageUrl} alt="user" height={60} width={60} className=" rounded-full object-cover h-16 w-16"/>
           <div className=" mt-3 w-full">
             <input readOnly value={userDetails?.fullName} type="text" name="fullName" className=" p-2 rounded-md text-sm outline-none border-none w-full" id="" />
             <br />

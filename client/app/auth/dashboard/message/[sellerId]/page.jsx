@@ -1,4 +1,5 @@
 "use client"
+import { Send } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
@@ -6,73 +7,120 @@ import io from 'socket.io-client';
 let socket;
 
 const SendingPersonalMessage = ({ params }) => {
-  const [isOnline, setIsOnline] = useState(false);
-
   const userDetails = useSelector(state => state.userDetails);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
 
   useEffect(() => {
-    // Establish connection with the server
-    socket = io('http://localhost:5000/');
+    const fetchPreviousMessages = async () => {
+      if (userDetails && params?.sellerId) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/direct/${userDetails._id}/${params.sellerId}`);
+          const data = await response.json();
+          setMessages(data);
+        } catch (error) {
+          console.error("Error fetching previous messages:", error);
+        }
+      }
+    };
+
+    fetchPreviousMessages();
+
+    socket = io(`${process.env.NEXT_PUBLIC_API_KEY_SOCKET}`);
 
     socket.on('connect', () => {
-      socket.emit('user connected', userId); // Notify server that this user is online
-
-      console.log('connected to server');
+      // console.log('connected to server');
     });
 
-    // Listen for incoming messages
     socket.on('chat message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
-    });
 
-    socket.on('user status', ({ userId: id, status }) => {
-      if (id === userId) {
-        setIsOnline(status === 'online');
+      // If the chat is not focused, increase the unread message count
+      if (!document.hasFocus()) {
+        setUnreadCount((prevCount) => prevCount + 1);
+        // showBrowserNotification(msg.content); // Show browser notification
       }
     });
 
-    // Cleanup on component unmount
     return () => {
       socket.disconnect();
     };
-  }, [userId]);
+  }, [userDetails, params.sellerId]);
 
   const sendMessage = (e) => {
     e.preventDefault();
-    // Emit the message to the server
-    socket.emit('chat message', {
-      content: message,
-      sender: userDetails?._id, // Replace 'user_id' with the actual user ObjectId
-      recipient: userDetails?._id, // Replace 'recipient_id' with the actual recipient ObjectId
-      chatRoom: 'abhay', // Optional: Replace with the actual chat room name or ID
-    });
-    // Clear the input field
-    setMessage('');
+
+    if (socket) {
+      socket.emit('chat message', {
+        content: message,
+        sender: userDetails?._id,
+        recipient: params?.sellerId,
+      });
+      setMessage('');
+    } else {
+      console.error('Socket is not initialized');
+    }
   };
 
-  return (
-    <div>
-          <p>{userId} is {isOnline ? 'Online' : 'Offline'}</p>
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
 
-      <ul>
+    // Reset unread count when the chat is focused
+    const handleFocus = () => {
+      setUnreadCount(0);
+    };
+
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, []);
+
+  return (
+    <div className=' w-full'>
+      {/* <h1>{unreadCount}</h1> */}
+      <ul className="space-y-2 h-[640px] p-4 overflow-auto scroll-smooth">
         {messages.map((msg, index) => (
-          <li key={index}>
-            <strong>{msg.sender}</strong>: {msg.content}
+          <li
+            key={index}
+            className={`flex ${msg.sender === userDetails._id ? "justify-end" : "justify-start"
+              }`}
+          >
+            <span
+              className={`${msg.sender === userDetails._id
+                  ? "bg-slate-600 text-right text-white"
+                  : "bg-slate-600 text-left text-white"
+                } p-2 rounded-md max-w-xs`}
+            >
+              {msg.content}
+            </span>
           </li>
         ))}
       </ul>
-      <form onSubmit={sendMessage}>
-        <input
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type a message..."
-        />
-        <button type="submit">Send</button>
-      </form>
+
+      <div className="relative z-50">
+        <div className="absolute inset-x-0 bottom-1 flex items-center p-2 bg-white">
+          <form className="flex w-full bottom-1  justify-between" onSubmit={sendMessage}>
+            <input
+              value={message}
+              className="w-full p-2 outline-none border-none"
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Type a message..."
+            />
+            <button className="bg-slate-200 p-2 rounded-sm" type="submit">
+              <Send size={16} />
+            </button>
+          </form>
+        </div>
+      </div>
+
     </div>
   );
-}
+};
 
 export default SendingPersonalMessage;

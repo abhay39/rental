@@ -15,7 +15,7 @@ const Card= ({ item }) => {
       <div className=" ml-3 mt-2 flex flex-col gap-2">
         <h2 className=" font-bold">{item.name.slice(0,25)}</h2>
         <p className=" flex items-center text-xs lg:text-sm gap-2"><MapPin size={15} color="green"/>{item.address}</p>
-        <p className=" text-xs text-slate-500">{item.description.slice(0,150)}</p>
+        <div dangerouslySetInnerHTML={{ __html: item.description.slice(0,150) }} className=" text-xs text-slate-500"></div>
         <p className=" text-green-600 font-bold">&#8377;.{item.regularPrice}/- </p>
         <div className=" flex items-center gap-4">
           <p className=" flex items-center gap-1">{item.bedroom} <BedDoubleIcon size={16} color="green"/></p>

@@ -1,7 +1,9 @@
 "use client"
+import { setCookie } from "cookies-next";
 import { Loader } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -11,6 +13,7 @@ import toast from "react-hot-toast";
 const SignUp = () => {
 
   const [isLoading, setIsLoading] = useState(false)
+  const router=useRouter();
   const [userData, setUserData] = useState({
     fullName: "",
     email: "",
@@ -57,6 +60,8 @@ const SignUp = () => {
       res = await res.json();
       if(status==201){
         toast.success(res.message);
+        setCookie("token",res.token)
+        router.push("/");
       }else{
         toast.error(res.message);
       }

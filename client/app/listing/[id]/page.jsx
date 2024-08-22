@@ -150,7 +150,7 @@ const ListingSingle = ({ params }) => {
         <h1 className=" text-xl font-bold justify-between flex flex-col md:flex-row items-center "><p>{listing?.name}</p></h1>
         <h1 className=" text-xl font-bold justify-between flex flex-col md:flex-row items-center "><p className=" text-green-600 text-xl">&#8377;. {listing?.regularPrice}/- Per month</p></h1>
         <p className=" flex items-center text-xs lg:text-sm gap-2"><MapPin size={15} color="green"/>{listing?.address}</p>
-        <p className=" text-sm text-slate-500 text-justify">{listing?.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: listing?.description }} className=" text-sm text-slate-500 text-justify"></p>
         <div className=" grid grid-cols-1  md:grid-cols-3 gap-4 items-center">
           <p className="text-sm text-slate-500 flex items-center gap-1 font-bold">{listing?.bedroom} Bedrooms <BedDouble /></p>
           <p className="text-sm text-slate-500 flex items-center gap-1 font-bold"> {listing?.bathroom} Bathrooms <Bath /> </p>
@@ -176,7 +176,7 @@ const ListingSingle = ({ params }) => {
         </div>
           <div >
             <button onClick={()=>{
-              router.push(`/listing/${params.id}/message/${listing.addedBy._id}`)
+              router.push(`/auth/dashboard/message/${listing.addedBy._id}`)
             }} className=" bg-green-400 font-bold p-2 text-white rounded-md">CONTACT SELLER</button>
           </div>
       </div>

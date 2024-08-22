@@ -55,15 +55,10 @@ app.use("/api/listing",listingRoutes)
 
 
 // Socket.IO setup
-const onlineUsers = new Map();
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  // console.log('a user connected');
 
-  socket.on('user connected', (userId) => {
-    onlineUsers.set(userId, socket.id); // Map userId to the socket ID
-    io.emit('user status', { userId, status: 'online' });
-    console.log(`${userId} is online`);
-  });
+
 
   socket.on('chat message', (msg) => {
     console.log('message: ' + msg);
@@ -72,16 +67,10 @@ io.on('connection', (socket) => {
     // Optionally, save the message to the database
     const newMessage=new Message(msg);
     newMessage.save();
-    // Implement message persistence and retrieval in your database here, if required.
   });
 
   socket.on('disconnect', () => {
-     const userId = [...onlineUsers.entries()].find(([key, value]) => value === socket.id)?.[0];
-    if (userId) {
-      onlineUsers.delete(userId);
-      io.emit('user status', { userId, status: 'offline' });
-      console.log(`${userId} is offline`);
-    }
+     
   });
 });
 
