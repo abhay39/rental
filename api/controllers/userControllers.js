@@ -23,7 +23,7 @@ export const createNewUser=async(req,res)=>{
     await user.save();
     if(user){
         const token = jwt.sign({id:user._id},process.env.SECRETE_KEY,{
-            expiresIn: '7days',
+            expiresIn: '7d',
         })
         res.status(201).json({message:"User created successfully",token:token})
     }
@@ -78,7 +78,7 @@ export const userLogin=async(req,res)=>{
     const isMatch= bcrypt.compare(password,user.password);
     if(!isMatch) return res.status(401).json({message:"Invalid credentials"});
     const token = jwt.sign({id:user._id},process.env.SECRETE_KEY,{
-        expiresIn: '7days',
+        expiresIn: '7d',
     })
     res.status(202).json({
         message:"User logged in successfully",
