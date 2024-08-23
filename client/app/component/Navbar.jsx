@@ -91,7 +91,7 @@ const Navbar = () => {
 
 
   return (
-    <div className=" flex sticky top-0 z-50 w-full py-3 bg-white items-center flex-wrap shadow-md justify-between lg:px-32 md:px-16 px-4">
+    <div className=" flex sticky top-0 z-20 w-full py-3 bg-white items-center flex-wrap shadow-md justify-between lg:px-32 md:px-16 px-4">
       <Link href={"/"} className=" text-2xl font-bold cursor-pointer duration-500 transition-all hover:opacity-55 text-black">Khoojo Room</Link>
       <div className=" border-black w-[30%] hidden rounded-xl lg:flex gap-2 p-2 items-center bg-slate-200">
         <input

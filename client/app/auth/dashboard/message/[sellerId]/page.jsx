@@ -17,6 +17,18 @@ const SendingPersonalMessage = ({ params }) => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const fetchUnreadCount = useCallback(async () => {
+    if (userDetails?._id) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/unread-message-count/${userDetails._id}`);
+        const data = await response.json();
+        setUnreadCount(data.totalUnread);
+      } catch (error) {
+        console.error('Error fetching unread message count:', error);
+      }
+    }
+  }, [userDetails?._id]);
+
   const fetchPreviousMessages = useCallback(async () => {
     if (userDetails && params?.sellerId) {
       try {
@@ -35,31 +47,19 @@ const SendingPersonalMessage = ({ params }) => {
         await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/mark-as-read/${userDetails._id}/${params.sellerId}`, {
           method: 'PUT'
         });
-        fetchUnreadCount();
+        fetchUnreadCount(); // This will work correctly now
       } catch (error) {
         console.error('Error marking messages as read:', error);
       }
     }
   }, [userDetails, params?.sellerId, fetchUnreadCount]);
 
-  const fetchUnreadCount = useCallback(async () => {
-    if (userDetails?._id) {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/unread-message-count/${userDetails._id}`);
-        const data = await response.json();
-        setUnreadCount(data.totalUnread);
-      } catch (error) {
-        console.error('Error fetching unread message count:', error);
-      }
-    }
-  }, [userDetails?._id]);
-
   useEffect(() => {
     fetchPreviousMessages();
     socket = io(`${process.env.NEXT_PUBLIC_API_KEY_SOCKET}`);
 
     socket.on('connect', () => {
-      // console.log('connected to server');
+      console.log('connected to server');
     });
 
     socket.on('chat message', (msg) => {

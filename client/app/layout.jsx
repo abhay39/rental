@@ -19,7 +19,6 @@ export default function RootLayout({
 }) {
   return (
     <MainPage>
-        <ClerkProvider>
           <html lang="en">
             <body className={inter.className}>
             <Toaster
@@ -31,7 +30,6 @@ export default function RootLayout({
               
               </body>
           </html>
-        </ClerkProvider>
     </MainPage>
   );
 }

@@ -15,10 +15,12 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 
+console.log(process.env.ORIGIN)
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Adjust the CORS settings as needed
+    origin: "*",
+    methods: ["GET", "POST"], // Adjust the CORS settings as needed
   }
 });
 

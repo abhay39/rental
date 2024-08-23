@@ -1,7 +1,6 @@
 "use client"
 import { setUserInfo } from "@/store/userStore";
-import { useUser } from "@clerk/nextjs"
-import { RootState } from "../../../store/index";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -11,7 +10,6 @@ import Image from "next/image";
 
 
 const Dashboard = () => {
-    const {user}=useUser();
     const router=useRouter();
     const dispatch=useDispatch();
     const userDetails = useSelector(state => state.userDetails);

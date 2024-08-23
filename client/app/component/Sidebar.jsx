@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image"
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 import ChatCard from "./ChatCard"
 import { Menu } from "lucide-react";
@@ -11,18 +11,17 @@ const Sidebar = () => {
     const [allChats,setAllChats]=useState([]);
     const [showUsers,setShowUsers]=useState(false);
     
-    const getAllChats=async()=>{
-      let req=await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/user/${user._id}/chat-list`);
-      let data=await req.json();
-      // console.log(data.users)
-      setAllChats(data.users)
-    }
-
-    useEffect(()=>{
-      if(user){
+    const getAllChats = useCallback(async () => {
+      let req = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/messages/user/${user._id}/chat-list`);
+      let data = await req.json();
+      setAllChats(data.users);
+    }, [user._id]);
+  
+    useEffect(() => {
+      if (user) {
         getAllChats();
       }
-    },[user,getAllChats])
+    }, [user, getAllChats]);
 
     const handleTOogle=()=>{
       setShowUsers(!showUsers);
@@ -30,7 +29,7 @@ const Sidebar = () => {
 
     
   return (
-    <aside> 
+    <aside className=" "> 
         <div className=" px-3 hidden lg:flex  py-3  gap-2 items-center justify-center md:justify-start">
             <Image src={user?.imageUrl || "/baby.gif"} alt="user icon" height={40} width={40} className=" rounded-full h-11 w-11 cursor-pointer hover:opacity-85"/>
             <div>
