@@ -54,9 +54,12 @@ const SendingPersonalMessage = ({ params }) => {
     }
   }, [userDetails, params?.sellerId, fetchUnreadCount]);
 
+
   useEffect(() => {
     fetchPreviousMessages();
-    socket = io(`${process.env.NEXT_PUBLIC_API_KEY_SOCKET}`);
+    socket = io(`${process.env.NEXT_PUBLIC_API_KEY_SOCKET}`,{
+      transports: ["websocket"]
+    });
 
     socket.on('connect', () => {
       console.log('connected to server');
