@@ -19,7 +19,7 @@ console.log(process.env.ORIGIN)
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.ORIGIN,
     methods: ["GET", "POST"], // Adjust the CORS settings as needed
   }
 });
